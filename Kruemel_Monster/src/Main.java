@@ -11,34 +11,27 @@ public class Main
 
     public static void main(String[] args)
     {
+        deserializeAll();
 
-        File playerNamesFile = new File("playerNames.dat");
-        if (playerNamesFile.exists() && !playerNamesFile.isDirectory())
-            playerNames = (PlayerNames) Main.deserialize("playerNames.dat");
-        else
-            playerNames = new PlayerNames(10);
-
-        File highscoresListFile = new File("highscoresList.dat");
-        if (highscoresListFile.exists() && !highscoresListFile.isDirectory())
-            highscoresList = (HighscoresList) Main.deserialize("highscoresList.dat");
-        else
-            highscoresList = new HighscoresList(10);
-        
         String name = JOptionPane.showInputDialog("Geben Sie ihren Namen ein: ");
         playerNames.newPlayerName(name);
-        Main.serialize(playerNames, "playerNames.dat");
+        serialize(playerNames, "playerNames.dat");
+
         int points = Integer.MAX_VALUE;
         while (points == Integer.MAX_VALUE) {
             try {
-                points = 0;
                 points = Integer.parseInt(JOptionPane.showInputDialog("Geben Sie ihre Punktzahl ein: "));
             } catch (NumberFormatException e) {
                 points = Integer.MAX_VALUE;
             }
         }
         highscoresList.checkNewHighscore(name, points);
-        Main.serialize(highscoresList, "highscoresList.dat");
+        serialize(highscoresList, "highscoresList.dat");
 
+        print();
+    }
+
+    public static void print() {
         System.out.println("Player names: ");
         for (String i : playerNames.names)
         {
@@ -51,7 +44,6 @@ public class Main
             System.out.println(i);
         }
     }
-
 
     private static void serialize(Serializable objectToSerialize, String serializationFileName) {
 
@@ -84,6 +76,21 @@ public class Main
                 }
             }
         }
+    }
+
+    private static void deserializeAll() {
+        File playerNamesFile = new File("playerNames.dat");
+        if (playerNamesFile.exists() && !playerNamesFile.isDirectory())
+            playerNames = (PlayerNames) Main.deserialize("playerNames.dat");
+        else
+            playerNames = new PlayerNames(10);
+
+        File highscoresListFile = new File("highscoresList.dat");
+        if (highscoresListFile.exists() && !highscoresListFile.isDirectory())
+            highscoresList = (HighscoresList) Main.deserialize("highscoresList.dat");
+        else
+            highscoresList = new HighscoresList(10);
+
     }
 
     private static Serializable deserialize(String serializationFileName) {
