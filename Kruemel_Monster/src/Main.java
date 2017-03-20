@@ -11,7 +11,7 @@ public class Main
 
     public static void main(String[] args)
     {
-        /*
+
         File playerNamesFile = new File("playerNames.dat");
         if (playerNamesFile.exists() && !playerNamesFile.isDirectory())
             playerNames = (PlayerNames) Main.deserialize("playerNames.dat");
@@ -23,17 +23,21 @@ public class Main
             highscoresList = (HighscoresList) Main.deserialize("highscoresList.dat");
         else
             highscoresList = new HighscoresList(10);
-        */
-        playerNames = new PlayerNames(10);
-        highscoresList = new HighscoresList(10);
-
+        
         String name = JOptionPane.showInputDialog("Geben Sie ihren Namen ein: ");
         playerNames.newPlayerName(name);
-        //Main.serialize(playerNames, "playerNames.dat");
-
-        int points = Integer.parseInt(JOptionPane.showInputDialog("Geben Sie ihre Punktzahl ein: "));
+        Main.serialize(playerNames, "playerNames.dat");
+        int points = Integer.MAX_VALUE;
+        while (points == Integer.MAX_VALUE) {
+            try {
+                points = 0;
+                points = Integer.parseInt(JOptionPane.showInputDialog("Geben Sie ihre Punktzahl ein: "));
+            } catch (NumberFormatException e) {
+                points = Integer.MAX_VALUE;
+            }
+        }
         highscoresList.checkNewHighscore(name, points);
-        //Main.serialize(highscoresList, "highscoresList.dat");
+        Main.serialize(highscoresList, "highscoresList.dat");
 
         System.out.println("Player names: ");
         for (String i : playerNames.names)
@@ -48,7 +52,7 @@ public class Main
         }
     }
 
-    /*
+
     private static void serialize(Serializable objectToSerialize, String serializationFileName) {
 
         //Opens the stream where the data will be put
@@ -117,5 +121,5 @@ public class Main
         }
         return deserializedInstance;
     }
-    */
+
 }
